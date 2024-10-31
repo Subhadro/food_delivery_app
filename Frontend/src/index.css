@@ -1,0 +1,9 @@
+/* Slick carousel CSS - must be at the very top */
+/* Full path alternative */
+@import "../node_modules/slick-carousel/slick/slick.css";
+@import "../node_modules/slick-carousel/slick/slick-theme.css";
+
+/* Tailwind directives */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
