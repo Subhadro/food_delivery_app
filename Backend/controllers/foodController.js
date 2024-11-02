@@ -40,33 +40,6 @@ exports.showAllFoods = async (req, res) => {
         });
     }
 };
-exports.updateFoodDetails = async (req, res) => {
-    try {
-        const { id } = req.params; // Get the ID from the request parameters
-        const updateData = req.body; // The new data to update with
-
-        // Find the food card by ID and update it with new data
-        const updatedFoodCard = await FoodDetails.findByIdAndUpdate(id, updateData, {
-            new: true, // Return the updated document
-            runValidators: true // Ensure new data adheres to schema validation
-        });
-
-        // Check if the food card exists
-        if (!updatedFoodCard) {
-            return res.status(404).json({ error: "Food item not found" });
-        }
-
-        // Send the updated food card as a response
-        res.status(200).json({
-            message: "Food item updated successfully",
-            foodItem: updatedFoodCard
-        });
-    } catch (err) {
-        return res.status(400).json({
-            error: "Error while updating food card"
-        });
-    }
-};
 exports.findFood = async (req, res) => {
     try {
         const ID = req.params.id;  // Directly get `id` from `req.params`
@@ -85,6 +58,53 @@ exports.findFood = async (req, res) => {
         return res.status(500).json({
             error: "Error while finding food",
         });
+    }
+};
+
+
+
+exports.editFoodDetails = async (req, res) => {
+    const { id } = req.params;
+    const {
+        restaurantName,
+        stars,
+        address,
+        foodImage,
+        categoryOfFood,
+        price,
+        quantity,
+        description,
+        offersAvailable,
+        lowestPrice,
+    } = req.body;
+
+    try {
+        // Find the food item by ID and update with the new data
+        const updatedFood = await FoodDetails.findByIdAndUpdate(
+            id,
+            {
+                restaurantName,
+                stars,
+                address,
+                foodImage,
+                categoryOfFood,
+                price,
+                quantity,
+                description,
+                offersAvailable,
+                lowestPrice,
+            },
+            { new: true } // Return the updated document
+        );
+
+        if (!updatedFood) {
+            return res.status(404).json({ error: 'Food item not found' });
+        }
+
+        res.json({ message: 'Food details updated successfully', updatedFood });
+    } catch (error) {
+        console.error('Error updating food details:', error);
+        res.status(500).json({ error: 'Failed to update food details' });
     }
 };
 

@@ -1,8 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../context/UserContext';
-import FoodDetail from './foodDetails';
-
 
 // StarIcon component to render individual stars
 const StarIcon = ({ filled }) => (
@@ -18,14 +16,18 @@ const StarIcon = ({ filled }) => (
 
 const Card = ({ _id, restaurantName, stars, address, foodImage, categoryOfFood, price }) => {
     const { user, setUser } = useUser();
-
     const navigate = useNavigate();
+
     const fullStars = Math.floor(stars);
     const halfStar = stars % 1 !== 0;
 
     const handleSeeDetails = () => {
         navigate(`/food/${_id}`);
     }
+
+    const handleEdit = () => {
+        navigate(`/food/update/${_id}`);
+    };
 
     const handleAddToCart = async () => {
         if (!user || !user._id) {
@@ -34,9 +36,6 @@ const Card = ({ _id, restaurantName, stars, address, foodImage, categoryOfFood, 
         }
 
         try {
-            console.log("Item ID:", _id);      // Log item ID
-            console.log("User ID:", user._id); // Log user ID
-
             const response = await fetch('http://localhost:3000/api/v1/users/addtocart', {
                 method: 'PUT',
                 headers: {
@@ -47,14 +46,9 @@ const Card = ({ _id, restaurantName, stars, address, foodImage, categoryOfFood, 
 
             if (response.ok) {
                 alert('Item added to cart successfully!');
-
-                // Fetch updated user data
                 const updatedUserResponse = await fetch(`http://localhost:3000/api/v1/users/${user._id}`);
                 const updatedUserData = await updatedUserResponse.json();
-
-                // Update the user state with the new cart details
                 setUser(updatedUserData);
-                console.log(updatedUserData);
             } else {
                 const errorData = await response.json();
                 console.error("Error:", errorData.error);
@@ -67,9 +61,7 @@ const Card = ({ _id, restaurantName, stars, address, foodImage, categoryOfFood, 
     };
 
     return (
-        <div
-            className="relative bg-white shadow-lg w-96 h-96 rounded-lg p-4 flex flex-col cursor-pointer mb-4 mx-1 hover:shadow-2xl hover:scale-105 transition-transform"
-        >
+        <div className="relative bg-white shadow-lg w-96 h-96 rounded-lg p-4 flex flex-col cursor-pointer mb-4 mx-1 hover:shadow-2xl hover:scale-105 transition-transform">
             {/* Food Image */}
             <img src={foodImage} alt={restaurantName} className="h-56 w-full object-cover rounded-t-lg" />
 
@@ -107,11 +99,19 @@ const Card = ({ _id, restaurantName, stars, address, foodImage, categoryOfFood, 
                 </button>
                 <button
                     onClick={handleAddToCart}
-                    className="w-5/12 mb-2 bg-green-500 text-white font-semibold p-2 rounded-lg hover:bg-green-600 transition-colors "
+                    className="w-5/12 mb-2 bg-green-500 text-white font-semibold p-2 rounded-lg hover:bg-green-600 transition-colors"
                 >
                     Add to Cart
                 </button>
             </div>
+
+            {/* Edit Button */}
+            <button
+                onClick={handleEdit}
+                className="absolute bottom-4 right-4 bg-yellow-500 text-white font-semibold p-2 rounded-full hover:bg-yellow-400 transition-colors"
+            >
+                Edit
+            </button>
         </div>
     );
 };

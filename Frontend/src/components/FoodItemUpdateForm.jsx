@@ -1,24 +1,53 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useFood } from '../context/FoodItemsContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
-const FoodItemForm = () => {
-    const { register, handleSubmit, formState: { errors } } = useForm({
-        defaultValues: {
-            offersAvailable: 0,
-            lowestPrice: false,
-        },
-    });
+const FoodItemUpdateForm = () => {
+    const { register, handleSubmit, setValue, formState: { errors } } = useForm();
+    const { id } = useParams();
     const { foodItems, setFoodItems } = useFood();
     const navigate = useNavigate();
+
+    const [data, setData] = useState();
+
+    useEffect(() => {
+        // Fetch food details on component mount
+        const fetchFoodDetails = async () => {
+            try {
+                const response = await fetch(`http://localhost:3000/api/v1/users/food/${id}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                if (response.ok) {
+                    const newdata = await response.json();
+                    setData(newdata.food);
+
+                    // Set default values for the form
+                    for (const [key, value] of Object.entries(newdata.food)) {
+                        setValue(key, value); // Use setValue to set each field with fetched data
+                    }
+                } else {
+                    const errorData = await response.json();
+                    console.error("Error:", errorData.error);
+                }
+            } catch (error) {
+                console.error("Failed to fetch food details:", error);
+            }
+        };
+
+        fetchFoodDetails();
+    }, [id, setValue]);
 
     const onSubmit = async (data) => {
         try {
             const response = await fetch(
-                `http://localhost:3000/api/v1/admin/food/create`,
+                `http://localhost:3000/api/v1/admin/food/update/${id}`,
                 {
-                    method: "POST",
+                    method: "PUT",
                     headers: {
                         "Content-Type": "application/json",
                     },
@@ -26,14 +55,16 @@ const FoodItemForm = () => {
                 }
             );
 
-            await setFoodItems([...foodItems, data]);
             if (response.ok) {
-                console.log("FoodItems created successfully");
+                setFoodItems((prevItems) =>
+                    prevItems.map((item) => (item._id === id ? { ...item, ...data } : item))
+                );
+                console.log("FoodItems updated successfully");
                 navigate('/');
             } else {
                 const errorData = await response.json();
                 console.error("Error:", errorData.error);
-                alert("Failed to create food item. Please try again.");
+                alert("Failed to update food item. Please try again.");
             }
         } catch (err) {
             console.log("Error:", err);
@@ -42,22 +73,19 @@ const FoodItemForm = () => {
     };
 
     return (
-        <div className="bg-gray-100 min-h-screen flex items-center justify-center">
+        <div className="bg-gray-100 min-h-screen flex items-center justify-center pt-10 pb-10">
             <form onSubmit={handleSubmit(onSubmit)} className="bg-white p-6 rounded-lg shadow-lg space-y-4 max-w-md w-full">
-                <h2 className="text-2xl font-semibold text-center text-gray-700">Add Food Item</h2>
+                <h2 className="text-2xl font-semibold text-center text-gray-700">Update Food Item</h2>
 
-                {/* Restaurant Name */}
                 <div>
                     <label className="block text-gray-700">Restaurant Name</label>
                     <input
-                        type="text"
                         {...register("restaurantName", { required: "Restaurant Name is required" })}
                         className="border border-gray-300 p-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                     {errors.restaurantName && <p className="text-red-500 text-sm">{errors.restaurantName.message}</p>}
                 </div>
 
-                {/* Stars */}
                 <div>
                     <label className="block text-gray-700">Stars</label>
                     <input
@@ -73,40 +101,33 @@ const FoodItemForm = () => {
                     {errors.stars && <p className="text-red-500 text-sm">{errors.stars.message}</p>}
                 </div>
 
-                {/* Address */}
                 <div>
                     <label className="block text-gray-700">Address</label>
                     <input
-                        type="text"
                         {...register("address", { required: "Address is required" })}
                         className="border border-gray-300 p-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                     {errors.address && <p className="text-red-500 text-sm">{errors.address.message}</p>}
                 </div>
 
-                {/* Food Image URL */}
                 <div>
                     <label className="block text-gray-700">Food Image URL</label>
                     <input
-                        type="text"
                         {...register("foodImage", { required: "Food image URL is required" })}
                         className="border border-gray-300 p-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                     {errors.foodImage && <p className="text-red-500 text-sm">{errors.foodImage.message}</p>}
                 </div>
 
-                {/* Category of Food */}
                 <div>
                     <label className="block text-gray-700">Category of Food</label>
                     <input
-                        type="text"
                         {...register("categoryOfFood", { required: "Category is required" })}
                         className="border border-gray-300 p-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                     {errors.categoryOfFood && <p className="text-red-500 text-sm">{errors.categoryOfFood.message}</p>}
                 </div>
 
-                {/* Price */}
                 <div>
                     <label className="block text-gray-700">Price</label>
                     <input
@@ -120,7 +141,6 @@ const FoodItemForm = () => {
                     {errors.price && <p className="text-red-500 text-sm">{errors.price.message}</p>}
                 </div>
 
-                {/* Description */}
                 <div>
                     <label className="block text-gray-700">Description</label>
                     <textarea
@@ -130,7 +150,6 @@ const FoodItemForm = () => {
                     {errors.description && <p className="text-red-500 text-sm">{errors.description.message}</p>}
                 </div>
 
-                {/* Offers Available */}
                 <div>
                     <label className="block text-gray-700">Offers Available</label>
                     <input
@@ -147,8 +166,6 @@ const FoodItemForm = () => {
                         className="border border-gray-300 p-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                 </div>
-
-                {/* Lowest Price */}
                 <div className="flex items-center">
                     <label className="block text-gray-700 mr-2">Lowest Price</label>
                     <input
@@ -164,4 +181,4 @@ const FoodItemForm = () => {
     );
 };
 
-export default FoodItemForm;
+export default FoodItemUpdateForm;

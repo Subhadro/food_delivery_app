@@ -4,14 +4,13 @@ const router = express.Router();
 
 // Import Controller
 // const { createComment } = require("../controllers/commentController");
-const { createFoodCard, showAllFoods, editFoodDetails } = require('../controllers/foodController');
+const { createOrder, showAllOrders } = require('../controllers/orderController');
 
 
 
 // Mapping Create
-router.post("/food/create", createFoodCard);
-router.get("/food/find", showAllFoods);
-router.put("/food/update/:id", editFoodDetails);
+router.post("/create", createOrder);
+router.get("/get", showAllOrders);
 
 
 // Export Controller

@@ -5,11 +5,14 @@ import Navbar from './../components/navBar';
 import cartImg from '../assets/cartImg.svg';
 import { useUser } from '../context/UserContext';
 import { useFood } from '../context/FoodItemsContext';
+import { useNavigate } from 'react-router-dom';
+
 
 const CartPage = () => {
     const { user, setUser } = useUser();
     const { foodItems } = useFood();
     const [cartItems, setCartItems] = useState([]);
+    const navigate = useNavigate();
 
     // Remove from cart handler
     const removefromcartHandler = async (userId, itemId) => {
@@ -96,7 +99,7 @@ const CartPage = () => {
                                 <p className="text-xl font-bold">₹{totalPrice}</p>
                             </div>
                             <div className="mt-4">
-                                <button className="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition">
+                                <button onClick={() => { navigate('order') }} className="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition">
                                     Proceed to Checkout
                                 </button>
                             </div>

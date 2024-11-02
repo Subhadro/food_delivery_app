@@ -12,6 +12,8 @@ import FoodItemForm from './components/FoodItemForm';
 import { FoodProvider } from './context/FoodItemsContext';
 import Layout from './components/Layout';
 import OffersPage from './components/Offer';
+import OrderPage from './pages/OrderPage';
+import FoodItemUpdateForm from './components/FoodItemUpdateForm';
 
 function App() {
   return (
@@ -30,6 +32,8 @@ function App() {
               <Route path="foodform" element={<FoodItemForm />} />
               <Route path="food/:id" element={<FoodDetail />} />
               <Route path="offer" element={<OffersPage />} />
+              <Route path="cart/order" element={<OrderPage />} />
+              <Route path="food/update/:id" element={<FoodItemUpdateForm />} />
             </Route>
           </Routes>
         </Router>
