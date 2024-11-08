@@ -4,7 +4,8 @@ const foodDetailsSchema = new mongoose.Schema({
     restaurantName: {
         type: String,
         required: true,
-        trim: true
+        trim: true,
+
     },
     stars: {
         type: Number,
@@ -50,7 +51,11 @@ const foodDetailsSchema = new mongoose.Schema({
     lowestPrice: {
         type: Boolean,
         default: false // Defaults to false
-    }
+    },
+    foodName: {
+        type: String,
+        required: true,
+    },
 }, {
     timestamps: true // Adds createdAt and updatedAt timestamps
 });

@@ -37,7 +37,7 @@ const HamburgerCarousel = () => {
     };
 
     return (
-        <div className="mt-4 mb-8 overflow-hidden">
+        <div className=" mb-8 overflow-hidden w-auto">
             <Slider {...settings}>
                 {images.map((image, index) => (
                     <div key={index} className="relative w-full">
@@ -45,16 +45,14 @@ const HamburgerCarousel = () => {
                         <img
                             src={image.src}
                             alt={image.title}
-                            className="w-full h-[400px] object-cover"
+                            className="w-full h-[300px] sm:h-[400px] object-cover"
                         />
 
                         {/* Overlay Content */}
                         <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center text-white p-6">
-                            <h2 className="text-4xl font-bold mb-2">{image.title}</h2>
-                            <p className="text-lg mb-4">{image.description}</p>
-                            {/* <button className="bg-yellow-500 text-white py-2 px-4 hover:bg-yellow-600 transition">
-                                Order Now
-                            </button> */}
+                            <h2 className="text-3xl sm:text-4xl font-bold mb-2">{image.title}</h2>
+                            <p className="text-base sm:text-lg mb-4 text-center px-4">{image.description}</p>
+
                         </div>
                     </div>
                 ))}

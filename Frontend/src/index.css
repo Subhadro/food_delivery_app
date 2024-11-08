@@ -7,3 +7,49 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+.shadow-t-lg {
+    box-shadow: 0 -8px 16px rgba(0, 0, 0, 0.5);
+}
+
+.custom-phone-input-dark input {
+    background-color: #2d3748;
+    color: #ffffff;
+}
+
+.custom-phone-input-dark .PhoneInputCountrySelect {
+    background-color: #2d3748;
+    color: #ffffff;
+    /* White text */
+    border: 1px solid #4a5568;
+    /* Gray border */
+}
+
+/* Style the dropdown list itself for better readability */
+.custom-phone-input-dark .PhoneInputCountrySelectArrow {
+    color: #ffffff;
+    /* White arrow for dark mode */
+}
+
+.custom-phone-input-dark .PhoneInputCountrySelect:focus,
+.custom-phone-input-dark .PhoneInputCountrySelect:hover {
+    background-color: #4a5568;
+    /* Slightly lighter gray on hover */
+}
+
+.custom-phone-input-dark .PhoneInputCountryOption {
+    background-color: #2d3748;
+    /* Dark background for dropdown options */
+    color: #ffffff;
+    /* White text */
+}
+
+.custom-phone-input-dark .PhoneInputCountryOption--highlight {
+    background-color: #4a5568;
+    /* Highlight color for selected option */
+}
+
+.smallfont {
+    font-size: 0.5rem;
+}

@@ -2,7 +2,7 @@ const FoodDetails = require("../models/foodDetailsModel");
 
 exports.createFoodCard = async (req, res) => {
     try {
-        const { restaurantName, stars, address, foodImage, categoryOfFood, price, quantity, description, offersAvailable, lowestPrice } = req.body;
+        const { restaurantName, stars, address, foodImage, categoryOfFood, price, quantity, description, offersAvailable, lowestPrice, foodName } = req.body;
 
         const foodItem = new FoodDetails({
             restaurantName,
@@ -14,7 +14,8 @@ exports.createFoodCard = async (req, res) => {
             quantity,
             description,
             offersAvailable,
-            lowestPrice
+            lowestPrice,
+            foodName
         });
 
         const savedFoodItem = await foodItem.save();
@@ -76,6 +77,7 @@ exports.editFoodDetails = async (req, res) => {
         description,
         offersAvailable,
         lowestPrice,
+        foodName
     } = req.body;
 
     try {
@@ -93,6 +95,7 @@ exports.editFoodDetails = async (req, res) => {
                 description,
                 offersAvailable,
                 lowestPrice,
+                foodName,
             },
             { new: true } // Return the updated document
         );
@@ -100,8 +103,9 @@ exports.editFoodDetails = async (req, res) => {
         if (!updatedFood) {
             return res.status(404).json({ error: 'Food item not found' });
         }
+        // console.log(updatedFood)
 
-        res.json({ message: 'Food details updated successfully', updatedFood });
+        res.json({ message: 'Food details updated successfully' + updatedFood });
     } catch (error) {
         console.error('Error updating food details:', error);
         res.status(500).json({ error: 'Failed to update food details' });

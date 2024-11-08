@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useFood } from '../context/FoodItemsContext';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useDark } from '../context/DarkMode';
 
 const FoodItemUpdateForm = () => {
     const { register, handleSubmit, setValue, formState: { errors } } = useForm();
@@ -10,6 +11,8 @@ const FoodItemUpdateForm = () => {
     const navigate = useNavigate();
 
     const [data, setData] = useState();
+
+    const { dark } = useDark(); // Get the dark mode status
 
     useEffect(() => {
         // Fetch food details on component mount
@@ -40,7 +43,7 @@ const FoodItemUpdateForm = () => {
         };
 
         fetchFoodDetails();
-    }, [id, setValue]);
+    }, [id, setValue, foodItems, setFoodItems]);
 
     const onSubmit = async (data) => {
         try {
@@ -64,30 +67,46 @@ const FoodItemUpdateForm = () => {
             } else {
                 const errorData = await response.json();
                 console.error("Error:", errorData.error);
-                alert("Failed to update food item. Please try again.");
+                toast.alert("Failed to update food item. Please try again.", {
+                    position: "top-right",
+                    autoClose: 3000,
+                    theme: dark ? "dark" : "light",
+                });
             }
         } catch (err) {
             console.log("Error:", err);
-            alert("An error occurred. Please check the backend connection.");
+            toast.alert("An error occurred. Please check the backend connection.", {
+                position: "top-right",
+                autoClose: 3000,
+                theme: dark ? "dark" : "light",
+            });
         }
     };
 
     return (
-        <div className="bg-gray-100 min-h-screen flex items-center justify-center pt-10 pb-10">
-            <form onSubmit={handleSubmit(onSubmit)} className="bg-white p-6 rounded-lg shadow-lg space-y-4 max-w-md w-full">
-                <h2 className="text-2xl font-semibold text-center text-gray-700">Update Food Item</h2>
+        <div className={`min-h-screen flex items-center justify-center pt-10 pb-10 ${dark ? 'bg-gray-900' : 'bg-gray-100'}`}>
+            <form onSubmit={handleSubmit(onSubmit)} className={`p-6 rounded-lg shadow-lg space-y-4 max-w-md w-full ${dark ? 'bg-gray-800 text-white' : 'bg-white text-gray-700'}`}>
+                <h2 className="text-2xl font-semibold text-center">Update Food Item</h2>
 
                 <div>
-                    <label className="block text-gray-700">Restaurant Name</label>
+                    <label className="block">Restaurant Name</label>
                     <input
                         {...register("restaurantName", { required: "Restaurant Name is required" })}
-                        className="border border-gray-300 p-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className={`border p-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-blue-500 ${dark ? 'bg-gray-700 text-white' : 'bg-white text-black'}`}
+                    />
+                    {errors.restaurantName && <p className="text-red-500 text-sm">{errors.restaurantName.message}</p>}
+                </div>
+                <div>
+                    <label className="block">Name of Recipe</label>
+                    <input
+                        {...register("foodName", { required: "Restaurant Name is required" })}
+                        className={`border p-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-blue-500 ${dark ? 'bg-gray-700 text-white' : 'bg-white text-black'}`}
                     />
                     {errors.restaurantName && <p className="text-red-500 text-sm">{errors.restaurantName.message}</p>}
                 </div>
 
                 <div>
-                    <label className="block text-gray-700">Stars</label>
+                    <label className="block">Stars</label>
                     <input
                         type="number"
                         step="0.1"
@@ -96,82 +115,82 @@ const FoodItemUpdateForm = () => {
                             min: { value: 0, message: "Rating must be at least 0" },
                             max: { value: 5, message: "Rating must not exceed 5" }
                         })}
-                        className="border border-gray-300 p-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className={`border p-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-blue-500 ${dark ? 'bg-gray-700 text-white' : 'bg-white text-black'}`}
                     />
                     {errors.stars && <p className="text-red-500 text-sm">{errors.stars.message}</p>}
                 </div>
 
                 <div>
-                    <label className="block text-gray-700">Address</label>
+                    <label className="block">Address</label>
                     <input
                         {...register("address", { required: "Address is required" })}
-                        className="border border-gray-300 p-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className={`border p-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-blue-500 ${dark ? 'bg-gray-700 text-white' : 'bg-white text-black'}`}
                     />
                     {errors.address && <p className="text-red-500 text-sm">{errors.address.message}</p>}
                 </div>
 
                 <div>
-                    <label className="block text-gray-700">Food Image URL</label>
+                    <label className="block">Food Image URL</label>
                     <input
                         {...register("foodImage", { required: "Food image URL is required" })}
-                        className="border border-gray-300 p-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className={`border p-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-blue-500 ${dark ? 'bg-gray-700 text-white' : 'bg-white text-black'}`}
                     />
                     {errors.foodImage && <p className="text-red-500 text-sm">{errors.foodImage.message}</p>}
                 </div>
 
                 <div>
-                    <label className="block text-gray-700">Category of Food</label>
+                    <label className="block">Category of Food</label>
                     <input
                         {...register("categoryOfFood", { required: "Category is required" })}
-                        className="border border-gray-300 p-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className={`border p-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-blue-500 ${dark ? 'bg-gray-700 text-white' : 'bg-white text-black'}`}
                     />
                     {errors.categoryOfFood && <p className="text-red-500 text-sm">{errors.categoryOfFood.message}</p>}
                 </div>
 
                 <div>
-                    <label className="block text-gray-700">Price</label>
+                    <label className="block">Price</label>
                     <input
                         type="number"
                         {...register("price", {
                             required: "Price is required",
                             min: { value: 0, message: "Price must be at least 0" }
                         })}
-                        className="border border-gray-300 p-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className={`border p-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-blue-500 ${dark ? 'bg-gray-700 text-white' : 'bg-white text-black'}`}
                     />
                     {errors.price && <p className="text-red-500 text-sm">{errors.price.message}</p>}
                 </div>
 
                 <div>
-                    <label className="block text-gray-700">Description</label>
+                    <label className="block">Description</label>
                     <textarea
                         {...register("description", { required: "Description is required" })}
-                        className="border border-gray-300 p-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className={`border p-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-blue-500 ${dark ? 'bg-gray-700 text-white' : 'bg-white text-black'}`}
                     />
                     {errors.description && <p className="text-red-500 text-sm">{errors.description.message}</p>}
                 </div>
 
                 <div>
-                    <label className="block text-gray-700">Offers Available</label>
+                    <label className="block">Offers Available</label>
                     <input
                         type="number"
                         {...register("offersAvailable")}
-                        className="border border-gray-300 p-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className={`border p-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-blue-500 ${dark ? 'bg-gray-700 text-white' : 'bg-white text-black'}`}
                     />
                 </div>
                 <div>
-                    <label className="block text-gray-700">Quantity</label>
+                    <label className="block">Quantity</label>
                     <input
                         type="number"
                         {...register("quantity")}
-                        className="border border-gray-300 p-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className={`border p-2 w-full rounded focus:outline-none focus:ring-2 focus:ring-blue-500 ${dark ? 'bg-gray-700 text-white' : 'bg-white text-black'}`}
                     />
                 </div>
                 <div className="flex items-center">
-                    <label className="block text-gray-700 mr-2">Lowest Price</label>
+                    <label className="block mr-2">Lowest Price</label>
                     <input
                         type="checkbox"
                         {...register("lowestPrice")}
-                        className="border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                 </div>
 

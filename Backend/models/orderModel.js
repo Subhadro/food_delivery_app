@@ -25,9 +25,19 @@ const orderSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    allIds: [{
+    userId: [{
         type: mongoose.Schema.Types.ObjectId,
-    }]
+    }],
+    allItemsWithQuant: {
+        type: Map,
+        of: Number,  // The value is a number representing the quantity of each item
+        required: true,
+        default: {}, // Initialize with an empty object
+    },
+    status: {
+        type: String,
+        default: "processing",
+    },
 }, {
     timestamps: true // Adds createdAt and updatedAt timestamps
 });

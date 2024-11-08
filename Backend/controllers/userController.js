@@ -57,30 +57,40 @@ exports.eraseAlluser = async (req, res) => {
 exports.findUser = async (req, res) => {
     try {
         const { name, password, type } = req.body;
+        // console.log(name, password, type);
 
         const user = await User.findOne({ name, password, type });
 
+        if (!user) {
+            // If no user was found, send a 404 response
+            return res.status(404).json({
+                error: "User not found",
+            });
+        }
+
+        // If a user was found, return the user object
         res.status(200).json({
             user: user,
-        })
-
-    }
-    catch (err) {
+        });
+    } catch (err) {
+        console.error("Error while finding user:", err); // Log error details for debugging
         return res.status(400).json({
-            error: "Error While finding User"
-        })
+            error: "Error while finding user",
+        });
     }
-}
+};
+
 exports.addtoCart = async (req, res) => {
     try {
         const { itemId, userId } = req.body;
-
+        // console.log("ITEMID " + itemId);
         const user = await User.findById(userId);
         if (user) {
             // Check if the item is already in the cart
             const itemExists = user.cartDetails.some(id => id.toString() === itemId);
 
             if (!itemExists) {
+                // console.log(user)
                 user.cartDetails.push(itemId);
                 await user.save();  // Save the updated user document
 
@@ -89,6 +99,8 @@ exports.addtoCart = async (req, res) => {
                     user: user
                 });
             } else {
+                // console.log(error)
+
                 res.status(400).json({
                     error: "Item is already in cart"
                 });
@@ -100,7 +112,7 @@ exports.addtoCart = async (req, res) => {
         }
     } catch (err) {
         return res.status(400).json({
-            error: "Error while finding user"
+            error: err.message
         });
     }
 };

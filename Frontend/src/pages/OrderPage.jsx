@@ -5,17 +5,20 @@ import { Elements, CardElement, useStripe, useElements } from '@stripe/react-str
 import PhoneInput, { isValidPhoneNumber } from 'react-phone-number-input';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import 'react-phone-number-input/style.css'; // Import the component styles
+import 'react-phone-number-input/style.css';
 import { useUser } from '../context/UserContext';
 import { useFood } from '../context/FoodItemsContext';
-
-
+import { usePrice } from '../context/PriceContext';
+import { useNavigate } from 'react-router-dom';
+import { useDark } from '../context/DarkMode';
 
 const stripePromise = loadStripe("pk_test_51QG0VJRxWN0pnugk3cV9zhw0fMipA0HPNFo1F9SqiiYZbWak7WXSHHaNr8cve5drgqRuaJYfYohcfaQH2vLhUZGd00NLdWAcZx");
 
 const OrderPage = () => {
     const { user } = useUser();
-    const { foodItems } = useFood();
+    const { foodItems, foodCart } = useFood();
+    const { price } = usePrice();
+    const { dark } = useDark();
 
     const [userInfo, setUserInfo] = useState({
         name: '',
@@ -23,43 +26,19 @@ const OrderPage = () => {
         address: '',
         phone: '',
         localHouse: '',
-        paymentPrice: '',
-        allIds: [],
+        paymentPrice: price.toString(),
+        userId: [],
     });
 
-    const [cartItems, setCartItems] = useState([]);
-
-    useEffect(() => {
-        if (user && user.cartDetails) {
-            const itemsInCart = user.cartDetails.map(id => foodItems.find(item => item._id === id)).filter(Boolean);
-            setCartItems(itemsInCart);
-        }
-    }, [user, foodItems]);
-
-    const totalPrice = cartItems.reduce((total, item) => {
-        const itemPrice = Number(item.price) || 0;
-        const discount = item.offersAvailable ? (itemPrice * item.offersAvailable) / 100 : (itemPrice * item.offer) / 100 || 0;
-        return total + itemPrice - discount;
-    }, 0);
+    const [phoneError, setPhoneError] = useState('');
 
     useEffect(() => {
         setUserInfo((prevInfo) => ({
             ...prevInfo,
-            paymentPrice: totalPrice.toString(),
+            userId: user._id,
+            paymentPrice: price.toString(),
         }));
-    }, [totalPrice]);
-
-    useEffect(() => {
-        if (user) {
-            const idArr = [user._id, ...(user.cartDetails || [])]; // Add user ID and cart item IDs
-            setUserInfo((prevInfo) => ({
-                ...prevInfo,
-                allIds: idArr,
-            }));
-        }
-    }, [user]); // Ensure this runs whenever `user` changes
-
-    const [phoneError, setPhoneError] = useState('');
+    }, [user, foodCart, price]);
 
     const handleInputChange = (e) => {
         setUserInfo({
@@ -73,31 +52,27 @@ const OrderPage = () => {
             ...userInfo,
             phone: value,
         });
-        if (value && !isValidPhoneNumber(value)) {
-            setPhoneError('Please enter a valid phone number');
-        } else {
-            setPhoneError('');
-        }
+        setPhoneError(value && !isValidPhoneNumber(value) ? 'Please enter a valid phone number' : '');
     };
 
     return (
         <Elements stripe={stripePromise}>
-            <div className="flex justify-center min-h-screen bg-gray-100">
-                <div className="bg-white shadow-lg p-8 rounded-lg w-1/2 m-4">
+            <div className={`flex flex-col w-full  sm:flex-row  justify-center min-h-screen ${dark ? 'bg-gray-800' : 'bg-gray-100'}`}>
+                <div className={`shadow-2xl p-8 rounded-lg w-full sm:w-1/2  ${dark ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'}`}>
                     <h2 className="text-2xl font-semibold mb-6">Order Details</h2>
                     <form className="space-y-4">
                         <input
                             type="text"
                             name="name"
                             placeholder="Full Name"
-                            className="w-full p-2 border rounded"
+                            className={`w-full p-2 border rounded ${dark ? 'bg-gray-700 text-white' : 'bg-white text-black'}`}
                             onChange={handleInputChange}
                         />
                         <input
                             type="email"
                             name="email"
                             placeholder="Email"
-                            className="w-full p-2 border rounded"
+                            className={`w-full p-2 border rounded ${dark ? 'bg-gray-700 text-white' : 'bg-white text-black'}`}
                             onChange={handleInputChange}
                         />
                         <PhoneInput
@@ -105,64 +80,63 @@ const OrderPage = () => {
                             value={userInfo.phone}
                             onChange={handlePhoneChange}
                             defaultCountry="IN"
-                            className="w-full py-2 px-2 border rounded"
+                            className={`w-full py-2 px-2 border rounded ${dark ? 'custom-phone-input-dark' : 'text-black'}`}
                         />
+
+
+
                         {phoneError && <p className="text-red-500 text-sm mt-1">{phoneError}</p>}
                         <input
                             type="text"
                             name="address"
                             placeholder="Address"
-                            className="w-full p-2 border rounded"
+                            className={`w-full p-2 border rounded ${dark ? 'bg-gray-700 text-white' : 'bg-white text-black'}`}
                             onChange={handleInputChange}
                         />
                         <input
                             type="text"
                             name="localHouse"
                             placeholder="House Name"
-                            className="w-full p-2 border rounded"
+                            className={`w-full p-2 border rounded ${dark ? 'bg-gray-700 text-white' : 'bg-white text-black'}`}
                             onChange={handleInputChange}
                         />
-                        <div className='flex flex-col text-slate-500'>
-                            <label htmlFor="price" className='py-2 ml-1'>Price</label>
+                        <div className="flex flex-col">
+                            <label htmlFor="price" className={`py-2 ml-1 ${dark ? 'text-gray-300' : 'text-slate-500'}`}>Price</label>
                             <input
                                 type="text"
-                                name="localHouse"
+                                name="paymentPrice"
                                 placeholder={userInfo.paymentPrice}
                                 value={userInfo.paymentPrice}
-                                className="text-slate-600 w-full p-2 border rounded bg-slate-200"
-                                onChange={handleInputChange}
+                                className={`text-slate-600 w-full cursor-not-allowed p-2 border rounded ${dark ? 'bg-gray-700 text-white' : 'bg-slate-200 text-black'}`}
                                 readOnly
                             />
                         </div>
                     </form>
                 </div>
 
-                <div className="bg-white shadow-lg p-8 rounded-lg w-1/2 m-4">
+                <div className={`shadow-lg p-8 rounded-lg w-full sm:w-1/2  ${dark ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'}`}>
                     <h2 className="text-2xl font-semibold mb-6">Payment</h2>
-                    <PaymentForm userInfo={userInfo} />
+                    <PaymentForm userInfo={userInfo} dark={dark} />
                 </div>
             </div>
         </Elements>
     );
 };
 
-
-
-
-
-const PaymentForm = ({ userInfo }) => {
+const PaymentForm = ({ userInfo, dark }) => {
     const stripe = useStripe();
     const elements = useElements();
     const [loading, setLoading] = useState(false);
+    const { foodCart } = useFood();
+    const { user, setUser } = useUser();
+
+    const navigate = useNavigate();
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         if (!stripe || !elements) return;
 
         try {
             setLoading(true);
-
-            // Request PaymentIntent from backend
             const response = await fetch("http://localhost:3000/api/v1/order/create", {
                 method: "POST",
                 headers: {
@@ -175,16 +149,13 @@ const PaymentForm = ({ userInfo }) => {
                     phone: userInfo.phone,
                     localHouse: userInfo.localHouse,
                     paymentPrice: userInfo.paymentPrice,
-                    allIds: userInfo.allIds
-                }) // specify the actual amount in INR
-                //5000
+                    userId: userInfo.userId,
+                    allItemsWithQuant: foodCart
+                }),
             });
 
             const { clientSecret } = await response.json();
-
-            // Check if clientSecret is missing in the response
             if (!clientSecret) {
-                console.error("Error: clientSecret is missing from response");
                 toast.error("Error initiating payment. Please try again.");
                 return;
             }
@@ -207,13 +178,36 @@ const PaymentForm = ({ userInfo }) => {
 
             if (paymentResult.error) {
                 console.error("Payment error:", paymentResult.error.message);
+                toast.error("Payment failed. Please try again.", {
+                    position: "top-right",
+                    autoClose: 3000,
+                    theme: dark ? "dark" : "light"
+                });
+                navigate('/');
             } else if (paymentResult.paymentIntent && paymentResult.paymentIntent.status === 'succeeded') {
-                console.log("Payment successful!", paymentResult.paymentIntent);
-                toast.success("Payment successful! Thank you for your order.");
-                // Optionally, navigate to order confirmation page
+                setUser((prev) => ({
+                    ...prev,
+                    cartDetails: [],
+                }));
+                toast.success("Payment successful! Thank you for your order.", {
+
+                    position: "top-right",
+                    autoClose: 3000,
+                    theme: dark ? "dark" : "light",
+
+                    onClose: () => navigate('/')
+                });
+
             }
         } catch (error) {
             console.error("Error processing payment:", error);
+            toast.error("Error processing payment. Please try again.",
+                {
+                    position: "top-right",
+                    autoClose: 3000,
+                    theme: dark ? "dark" : "light"
+                });
+            navigate('/');
         } finally {
             setLoading(false);
         }
@@ -221,15 +215,29 @@ const PaymentForm = ({ userInfo }) => {
 
     return (
         <form onSubmit={handleSubmit} className="space-y-4">
-            <CardElement className="p-4 border rounded bg-gray-50" />
+            <CardElement options={{
+                style: {
+                    base: {
+                        fontSize: '16px',
+                        color: dark ? '#ffffff' : '#000000',
+                        '::placeholder': {
+                            color: dark ? '#a0aec0' : '#4a5568',
+                        },
+                    },
+                    invalid: {
+                        color: '#ff0000',
+                    },
+                },
+            }}
+                className={`p-4 border rounded ${dark ? 'bg-gray-700' : 'bg-gray-50'}`} />
             <button
                 type="submit"
                 disabled={!stripe || loading}
-                className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
+                className={`w-full py-2 rounded ${loading ? 'bg-gray-600' : 'bg-blue-500'} ${dark ? 'text-white' : 'text-white'} hover:bg-blue-600`}
             >
                 {loading ? "Processing..." : "Pay Now"}
             </button>
-            <ToastContainer /> {/* Toast container for notifications */}
+
         </form>
     );
 };
