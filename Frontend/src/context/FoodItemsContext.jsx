@@ -30,7 +30,7 @@ export const FoodProvider = ({ children }) => {
             if (response.ok) {
                 const data = await response.json();
                 setFoodItems(data.foodItems);  // Assuming data is an array of food items
-                console.log("Food items loaded successfully");
+                // console.log("Food items loaded successfully");
             } else {
                 const errorData = await response.json();
                 console.error("Error fetching food items:", errorData.error);
@@ -41,7 +41,7 @@ export const FoodProvider = ({ children }) => {
                 });
             }
         } catch (err) {
-            console.log("Error:", err);
+            // console.log("Error:", err);
             toast.alert("An error occurred. Please check the backend connection.", {
                 position: "top-right",
                 autoClose: 3000,

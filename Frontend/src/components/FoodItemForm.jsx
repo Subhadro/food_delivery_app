@@ -29,7 +29,7 @@ const FoodItemForm = () => {
                 }
             );
             if (response.ok) {
-                console.log("Food item created successfully");
+                // console.log("Food item created successfully");
 
                 // Fetch all food items to get the updated list including IDs
                 const fetchResponse = await fetch(`https://food-delivery-app-backend-oihz.onrender.com/api/v1/admin/food/find`);
@@ -38,7 +38,7 @@ const FoodItemForm = () => {
                 // Update the food items in the context
                 setFoodItems(foodData.foodItems);
 
-                console.log(foodData.foodItems);
+                // console.log(foodData.foodItems);
                 // Redirect to home page or any other desired page
                 toast.success("Food item created successfully.", {
                     position: "top-right",

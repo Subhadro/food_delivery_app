@@ -26,10 +26,10 @@ const LoginPage = () => {
 
             if (response.ok) {
                 const data = await response.json();
-                console.log(data)
+                // console.log(data)
                 await setUser(data.user); // Set user data in context
                 localStorage.setItem('user', JSON.stringify(data.user));
-                console.log("User found successfully:", data.user); // Log user data directly
+                // console.log("User found successfully:", data.user); // Log user data directly
                 toast.success("You are successfully logged in!", {
                     position: "top-right",
                     autoClose: 1000,
@@ -46,7 +46,7 @@ const LoginPage = () => {
                 });
             }
         } catch (err) {
-            console.log("Error:", err);
+            // console.log("Error:", err);
             toast.warn("An error occurred. Please check the backend connection.", {
                 position: "top-right",
                 autoClose: 3000,

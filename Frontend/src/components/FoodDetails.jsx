@@ -12,7 +12,7 @@ const FoodDetail = () => {
 
     const handleAddToCart = async () => {
         if (!user || !user._id || !id) {
-            console.log("You need to log in to add items to the cart.");
+            // console.log("You need to log in to add items to the cart.");
             toast.success("You need to log in to add items to the cart.", {
                 position: "top-right",
                 autoClose: 3000,
@@ -72,7 +72,7 @@ const FoodDetail = () => {
                 if (response.ok) {
                     const data = await response.json();
                     setFood(data.food); // Set the food data
-                    console.log(food);
+                    // console.log(food);
                 } else {
                     const errorData = await response.json();
                     console.error("Error:", errorData.error);

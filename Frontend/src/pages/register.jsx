@@ -22,7 +22,7 @@ const RegisterPage = () => {
             );
 
             if (response.ok) {
-                console.log("User created successfully");
+                // console.log("User created successfully");
                 navigate('/login');
             } else {
                 const errorData = await response.json();
@@ -34,7 +34,7 @@ const RegisterPage = () => {
                 });
             }
         } catch (err) {
-            console.log("Error:", err);
+            // console.log("Error:", err);
             toast.alert("An error occurred. Please check the backend connection.", {
                 position: "top-right",
                 autoClose: 3000,

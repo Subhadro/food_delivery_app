@@ -62,7 +62,7 @@ const FoodItemUpdateForm = () => {
                 setFoodItems((prevItems) =>
                     prevItems.map((item) => (item._id === id ? { ...item, ...data } : item))
                 );
-                console.log("FoodItems updated successfully");
+                // console.log("FoodItems updated successfully");
                 navigate('/');
             } else {
                 const errorData = await response.json();
@@ -74,7 +74,7 @@ const FoodItemUpdateForm = () => {
                 });
             }
         } catch (err) {
-            console.log("Error:", err);
+            // console.log("Error:", err);
             toast.alert("An error occurred. Please check the backend connection.", {
                 position: "top-right",
                 autoClose: 3000,
