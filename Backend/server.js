@@ -11,10 +11,11 @@ dbConnect();
 // Middleware
 app.use(express.json());
 app.use(cors({
-    origin: 'http://localhost:5173', // frontend URL during development
+    origin: ['http://localhost:5173', 'https://food-delivery-app-backend-oihz.onrender.com'], // Allow both local and deployed frontend
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
 
 // Routes
 const userRoutes = require('./routes/userRoutes');
