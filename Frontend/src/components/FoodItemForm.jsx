@@ -19,7 +19,7 @@ const FoodItemForm = () => {
     const onSubmit = async (data) => {
         try {
             const response = await fetch(
-                `http://localhost:4000/api/v1/admin/food/create`,
+                `https://food-delivery-app-backend-oihz.onrender.com/api/v1/admin/food/create`,
                 {
                     method: "POST",
                     headers: {
@@ -32,7 +32,7 @@ const FoodItemForm = () => {
                 console.log("Food item created successfully");
 
                 // Fetch all food items to get the updated list including IDs
-                const fetchResponse = await fetch(`http://localhost:4000/api/v1/admin/food/find`);
+                const fetchResponse = await fetch(`https://food-delivery-app-backend-oihz.onrender.com/api/v1/admin/food/find`);
                 const foodData = await fetchResponse.json();
 
                 // Update the food items in the context

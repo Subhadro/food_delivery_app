@@ -18,7 +18,7 @@ const CartPage = () => {
 
     const removefromcartHandler = async (userId, itemId) => {
         try {
-            const response = await fetch(`http://localhost:4000/api/v1/users/removefromcart`, {
+            const response = await fetch(`https://food-delivery-app-backend-oihz.onrender.com/api/v1/users/removefromcart`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

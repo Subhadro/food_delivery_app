@@ -26,7 +26,7 @@ app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/admin", adminRoutes);
 app.use("/api/v1/order", orderRoutes);
 // Start server
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
     console.log(`App listening on ${PORT}`);
 });

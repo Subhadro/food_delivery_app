@@ -22,7 +22,7 @@ const FoodDetail = () => {
         }
 
         try {
-            const response = await fetch('http://localhost:4000/api/v1/users/addtocart', {
+            const response = await fetch('https://food-delivery-app-backend-oihz.onrender.com/api/v1/users/addtocart', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -36,7 +36,7 @@ const FoodDetail = () => {
                     autoClose: 3000,
                     theme: dark ? "dark" : "light",
                 });
-                const updatedUserResponse = await fetch(`http://localhost:4000/api/v1/users/${user._id}`);
+                const updatedUserResponse = await fetch(`https://food-delivery-app-backend-oihz.onrender.com/api/v1/users/${user._id}`);
                 const updatedUserData = await updatedUserResponse.json();
                 setUser(updatedUserData);
             } else {
@@ -62,7 +62,7 @@ const FoodDetail = () => {
         // Fetch food details on component mount
         const fetchFoodDetails = async () => {
             try {
-                const response = await fetch(`http://localhost:4000/api/v1/users/food/${id}`, {
+                const response = await fetch(`https://food-delivery-app-backend-oihz.onrender.com/api/v1/users/food/${id}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

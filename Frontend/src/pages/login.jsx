@@ -14,7 +14,7 @@ const LoginPage = () => {
     const onSubmit = async (loginData) => {
         try {
             const response = await fetch(
-                `http://localhost:4000/api/v1/users/find`,
+                `https://food-delivery-app-backend-oihz.onrender.com/api/v1/users/find`,
                 {
                     method: "POST",
                     headers: {

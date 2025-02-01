@@ -18,7 +18,7 @@ const FoodItemUpdateForm = () => {
         // Fetch food details on component mount
         const fetchFoodDetails = async () => {
             try {
-                const response = await fetch(`http://localhost:4000/api/v1/users/food/${id}`, {
+                const response = await fetch(`https://food-delivery-app-backend-oihz.onrender.com/api/v1/users/food/${id}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -48,7 +48,7 @@ const FoodItemUpdateForm = () => {
     const onSubmit = async (data) => {
         try {
             const response = await fetch(
-                `http://localhost:4000/api/v1/admin/food/update/${id}`,
+                `https://food-delivery-app-backend-oihz.onrender.com/api/v1/admin/food/update/${id}`,
                 {
                     method: "PUT",
                     headers: {

@@ -21,7 +21,7 @@ const ProfilePage = () => {
     useEffect(() => {
         const fetchOrders = async () => {
             try {
-                const response = await fetch('http://localhost:4000/api/v1/order/get');
+                const response = await fetch('https://food-delivery-app-backend-oihz.onrender.com/api/v1/order/get');
                 const data = await response.json();
 
                 const userOrders = data.orderItems.filter(order => order.userId[0] === user._id);
