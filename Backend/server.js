@@ -11,9 +11,10 @@ dbConnect();
 // Middleware
 app.use(express.json());
 app.use(cors({
-    origin: ['http://localhost:5173', 'https://food-delivery-app-backend-oihz.onrender.com'], // Allow both local and deployed frontend
+    origin: ['http://localhost:5173', 'https://food-delivery-app-frontend-xagg.onrender.com'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization']
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true // Ensure cookies and authentication headers are allowed
 }));
 
 
