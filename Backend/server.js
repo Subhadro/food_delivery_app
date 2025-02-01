@@ -23,17 +23,8 @@ const orderRoutes = require('./routes/orderRoutes');
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/admin", adminRoutes);
 app.use("/api/v1/order", orderRoutes);
-
-// Serve the frontend build folder as static content
-app.use(express.static(path.join(__dirname, '../frontend/dist')));
-
-// Fallback route to serve frontend index.html for non-API routes
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/dist', 'index.html'));
-});
-
 // Start server
-const PORT = 4000;
+const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
     console.log(`App listening on ${PORT}`);
 });

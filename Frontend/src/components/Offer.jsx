@@ -22,7 +22,7 @@ const OffersPage = () => {
         }
 
         try {
-            const response = await fetch('http://localhost:3000/api/v1/users/addtocart', {
+            const response = await fetch('http://localhost:4000/api/v1/users/addtocart', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -36,7 +36,7 @@ const OffersPage = () => {
                     autoClose: 3000,
                     theme: dark ? "dark" : "light",
                 });
-                const updatedUserResponse = await fetch(`http://localhost:3000/api/v1/users/${user._id}`);
+                const updatedUserResponse = await fetch(`http://localhost:4000/api/v1/users/${user._id}`);
                 const updatedUserData = await updatedUserResponse.json();
                 setUser(updatedUserData);
             } else {
@@ -61,7 +61,7 @@ const OffersPage = () => {
     useEffect(() => {
         const fetchFoodItems = async () => {
             try {
-                const response = await fetch("http://localhost:3000/api/v1/users/get/food");
+                const response = await fetch("http://localhost:4000/api/v1/users/get/food");
                 const data = await response.json();
                 const offerItems = data.foodItems.filter(item => item.offer > 0);
                 setFoodItems(offerItems);

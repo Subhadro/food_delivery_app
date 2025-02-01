@@ -16,7 +16,7 @@ const AdminOrderTable = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get('http://localhost:3000/api/v1/order/get')
+        axios.get('http://localhost:4000/api/v1/order/get')
             .then(response => setOrders(response.data.orderItems))
             .catch(error => console.error("Error fetching orders:", error));
     }, []);
@@ -29,7 +29,7 @@ const AdminOrderTable = () => {
                 for (const itemId of Object.keys(order.allItemsWithQuant)) {
                     if (!categoryNames[itemId]) {
                         try {
-                            const response = await axios.get(`http://localhost:3000/api/v1/users/food/${itemId}`);
+                            const response = await axios.get(`http://localhost:4000/api/v1/users/food/${itemId}`);
                             newCategoryNames[itemId] = response.data.food.categoryOfFood;
                         } catch (error) {
                             console.error(`Error fetching category for item ${itemId}:`, error);
@@ -45,7 +45,7 @@ const AdminOrderTable = () => {
 
     const handleStatusChange = async (orderId, newStatus) => {
         try {
-            const response = await axios.put(`http://localhost:3000/api/v1/order/orderstatus/${orderId}`, { status: newStatus });
+            const response = await axios.put(`http://localhost:4000/api/v1/order/orderstatus/${orderId}`, { status: newStatus });
             setOrders(orders.map(order => order._id === orderId ? { ...order, status: response.data.updatedOrder.status } : order));
         } catch (error) {
             console.error(`Error updating order status for ${orderId}:`, error);
