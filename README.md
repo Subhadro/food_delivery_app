@@ -17,9 +17,19 @@ The FoodMania app, built with the MERN stack, is already deployed and accessible
 
 
 ## Screenshots
+- below, there are some images of this website pages:-
 
-![App Screenshot](https://github.com/Subhadro/Currency_converter/blob/21045855f437a1a824c3c1754a272631401642c2/currency.jpeg)
-![App Screenshot](https://mega.nz/file/0yZ0XT5J#JN6zZcg6sTj6UvtJ394qmn8rNZ-7eMPCrJ47Lx-J6Xo)
+Here is the home page image of this website :-
+
+![App Screenshot](https://github.com/Subhadro/food_delivery_app/blob/a837f5482db9cf47621893fe387bc8482179f6f8/firstpage.jpeg)
+
+This is the admin dashboard image of this website :-
+
+![App Screenshot](https://github.com/Subhadro/food_delivery_app/blob/a837f5482db9cf47621893fe387bc8482179f6f8/secondpage.jpeg)
+
+This is the offer page image of this website :-
+
+![App Screenshot](https://github.com/Subhadro/food_delivery_app/blob/a837f5482db9cf47621893fe387bc8482179f6f8/thirdpage.jpeg)
 
 ## Features
 
