@@ -20,7 +20,7 @@ export const FoodProvider = ({ children }) => {
 
     const fetchFoodItems = async () => {
         try {
-            const response = await fetch('http://localhost:4000/api/v1/admin/food/find', {
+            const response = await fetch('https://food-delivery-app-backend-oihz.onrender.com/api/v1/admin/food/find', {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",

@@ -137,7 +137,7 @@ const PaymentForm = ({ userInfo, dark }) => {
 
         try {
             setLoading(true);
-            const response = await fetch("http://localhost:4000/api/v1/order/create", {
+            const response = await fetch("https://food-delivery-app-backend-oihz.onrender.com/api/v1/order/create", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

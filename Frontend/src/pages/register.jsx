@@ -11,7 +11,7 @@ const RegisterPage = () => {
     const onSubmit = async (data) => {
         try {
             const response = await fetch(
-                `http://localhost:4000/api/v1/users/create`,
+                `https://food-delivery-app-backend-oihz.onrender.com/api/v1/users/create`,
                 {
                     method: "POST",
                     headers: {
