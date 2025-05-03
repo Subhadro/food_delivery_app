@@ -81,12 +81,15 @@ const FoodDetail = () => {
             <div className={`flex flex-col md:flex-row items-center md:items-start gap-6 p-6 shadow-lg rounded-lg ${dark ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'}`}>
                 {/* Image */}
                 <div className="w-full md:w-1/2">
-                    <img
-                        src={food.foodImage}
-                        alt={food.categoryOfFood}
-                        className="w-full h-64 md:h-96 object-cover rounded-lg"
-                    />
+                    <div className="w-full aspect-[4/3] md:aspect-[1/1] overflow-hidden rounded-lg">
+                        <img
+                            src={food.foodImage}
+                            alt={food.categoryOfFood}
+                            className="w-full h-full object-cover rounded-lg"
+                        />
+                    </div>
                 </div>
+
 
                 {/* Details */}
                 <div className="w-full md:w-1/2 flex flex-col justify-between">
