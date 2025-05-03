@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useUser } from '../context/UserContext';
 import { useDark } from '../context/DarkMode';
 import { toast } from 'react-toastify';
 
 const FoodDetail = () => {
-    const { id } = useParams(); // Get the ID from route parameters
+    const { id } = useParams();
     const [food, setFood] = useState(null);
-    const { user, setUser } = useUser(); // Get dark mode state
+    const { user, setUser } = useUser();
     const { dark } = useDark();
 
     const handleAddToCart = async () => {
         if (!user || !user._id || !id) {
-            // console.log("You need to log in to add items to the cart.");
             toast.success("You need to log in to add items to the cart.", {
                 position: "top-right",
                 autoClose: 3000,
@@ -24,9 +23,7 @@ const FoodDetail = () => {
         try {
             const response = await fetch('https://food-delivery-app-backend-oihz.onrender.com/api/v1/users/addtocart', {
                 method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ itemId: id, userId: user._id }),
             });
 
@@ -42,7 +39,7 @@ const FoodDetail = () => {
             } else {
                 const errorData = await response.json();
                 console.error("Error:", errorData.error);
-                toast.alert("Failed to add item to cart. Please try again.", {
+                toast.error("Failed to add item to cart. Please try again.", {
                     position: "top-right",
                     autoClose: 3000,
                     theme: dark ? "dark" : "light",
@@ -50,7 +47,7 @@ const FoodDetail = () => {
             }
         } catch (error) {
             console.error("Error:", error);
-            toast.alert("An error occurred. Please try again.", {
+            toast.error("An error occurred. Please try again.", {
                 position: "top-right",
                 autoClose: 3000,
                 theme: dark ? "dark" : "light",
@@ -59,20 +56,12 @@ const FoodDetail = () => {
     };
 
     useEffect(() => {
-        // Fetch food details on component mount
         const fetchFoodDetails = async () => {
             try {
-                const response = await fetch(`https://food-delivery-app-backend-oihz.onrender.com/api/v1/users/food/${id}`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                });
-
+                const response = await fetch(`https://food-delivery-app-backend-oihz.onrender.com/api/v1/users/food/${id}`);
                 if (response.ok) {
                     const data = await response.json();
-                    setFood(data.food); // Set the food data
-                    // console.log(food);
+                    setFood(data.food);
                 } else {
                     const errorData = await response.json();
                     console.error("Error:", errorData.error);
@@ -83,46 +72,44 @@ const FoodDetail = () => {
         };
 
         fetchFoodDetails();
-    }, [id]); // Only run this effect when the `id` changes
+    }, [id]);
 
-    // If food data hasn't loaded yet, show a loading message
-    if (!food) {
-        return <div>Loading...</div>;
-    }
+    if (!food) return <div className="text-center mt-20 text-lg">Loading...</div>;
 
     return (
-        <div className="mx-auto w-4/5 my-20">
-            <div className={`flex justify-center shadow-lg rounded-lg p-6 ${dark ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'}`}>
-                {/* Food Image */}
-                <div className="flex-shrink-0 mr-6">
+        <div className="mx-auto w-11/12 md:w-4/5 my-10">
+            <div className={`flex flex-col md:flex-row items-center md:items-start gap-6 p-6 shadow-lg rounded-lg ${dark ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'}`}>
+                {/* Image */}
+                <div className="w-full md:w-1/2">
                     <img
                         src={food.foodImage}
                         alt={food.categoryOfFood}
-                        className="rounded-lg object-cover w-96 h-96"
+                        className="w-full h-64 md:h-96 object-cover rounded-lg"
                     />
                 </div>
 
-                {/* Food Details */}
-                <div className="flex flex-col justify-between">
+                {/* Details */}
+                <div className="w-full md:w-1/2 flex flex-col justify-between">
                     <div>
-                        <h1 className="text-3xl font-bold mb-2">{food.restaurantName}</h1>
-                        <p className={`text-lg mb-4 ${dark ? 'text-gray-400' : 'text-gray-700'}`}>{food.address}</p>
-                        <p className={`text-sm mb-4 ${dark ? 'text-gray-500' : 'text-gray-500'}`}>{food.description}</p>
+                        <h1 className="text-2xl md:text-3xl font-bold mb-2">{food.restaurantName}</h1>
+                        <p className={`text-base md:text-lg mb-2 ${dark ? 'text-gray-400' : 'text-gray-700'}`}>{food.address}</p>
+                        <p className={`text-sm md:text-base mb-4 ${dark ? 'text-gray-500' : 'text-gray-600'}`}>{food.description}</p>
 
-                        <div className="flex items-center space-x-2">
-                            <span className="text-yellow-500 font-bold">{food.stars} ★</span>
+                        <div className="flex items-center gap-2 text-sm md:text-base mb-2">
+                            <span className="text-yellow-500 font-semibold">{food.stars} ★</span>
                             <span className={dark ? 'text-gray-400' : 'text-gray-600'}>•</span>
                             <span className={`capitalize ${dark ? 'text-green-400' : 'text-green-600'}`}>{food.categoryOfFood}</span>
                         </div>
 
-                        <p className="text-2xl font-semibold mt-4">₹{food.price}</p>
+                        <p className="text-xl md:text-2xl font-semibold mt-2">₹{food.price}</p>
                     </div>
 
-                    <div className="mt-6">
-                        <button className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition" onClick={handleAddToCart}>
-                            Add to Cart
-                        </button>
-                    </div>
+                    <button
+                        onClick={handleAddToCart}
+                        className="mt-6 w-full md:w-fit bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition"
+                    >
+                        Add to Cart
+                    </button>
                 </div>
             </div>
         </div>
